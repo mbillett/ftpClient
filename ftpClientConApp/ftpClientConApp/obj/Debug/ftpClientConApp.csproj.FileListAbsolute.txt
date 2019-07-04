@@ -1,0 +1,6 @@
+C:\Users\marcella\source\repos\ftpClientConApp\ftpClientConApp\obj\Debug\ftpClientConApp.csproj.CoreCompileInputs.cache
+C:\Users\marcella\source\repos\ftpClientConApp\ftpClientConApp\bin\Debug\ftpClientConApp.exe.config
+C:\Users\marcella\source\repos\ftpClientConApp\ftpClientConApp\bin\Debug\ftpClientConApp.exe
+C:\Users\marcella\source\repos\ftpClientConApp\ftpClientConApp\bin\Debug\ftpClientConApp.pdb
+C:\Users\marcella\source\repos\ftpClientConApp\ftpClientConApp\obj\Debug\ftpClientConApp.exe
+C:\Users\marcella\source\repos\ftpClientConApp\ftpClientConApp\obj\Debug\ftpClientConApp.pdb
