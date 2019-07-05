@@ -23,7 +23,7 @@ using System.Threading;  // password
 
 namespace ftpClientConApp
 {
-    class Program
+    class ServerConnectionInformation
     {
         #region Private Member Variables
         private string userName;
@@ -45,7 +45,7 @@ namespace ftpClientConApp
         public string UserName
         {
             get { return userName; }
-            set => userName = value;
+            set { userName = value; }
         }
         public string PassWord
         {
@@ -77,12 +77,66 @@ namespace ftpClientConApp
             get { return runOption; }
             set => runOption = value;
         }
+        // #endregion
+
+        // #region Public Methods  
+        /// Constructor
+        //public ServerConnectionInformation() : this(string.Empty, string.Empty, string.Empty, string.Empty) { }
+        public ServerConnectionInformation()
+        {
+            ServerName = "";
+            UserName = "anonymous";
+            PassWord = "nobody@nowhere.com";
+            FileName = "";
+        }
+        ///Constructor
+        public ServerConnectionInformation(string serverName, string userName, string passWord,  string fileName)
+        {
+            ServerName = serverName;
+            UserName = userName;
+            PassWord = PassWord;
+            FileName = fileName;
+        }
+
+        public static void GetConnectionInformation(ref ServerConnectionInformation myConnection )
+        {
+            Console.WriteLine("\nPlease provide the following information: ");
+
+            // get ServerName
+            Console.WriteLine("Server Name: ");
+            Console.WriteLine("Example serverName.xx.com ");
+            string serverName = Console.ReadLine();
+            Console.WriteLine($"\nYou Entered Server Name: {serverName}");
+
+            // get UserName
+            Console.WriteLine("\nUser Name : ");
+            string userName = Console.ReadLine();
+            Console.WriteLine($"\nYou Entered User Name: {userName}");
+
+            // get PassWord
+            Console.WriteLine("\nPassword : ");
+            string passWord = Console.ReadLine();
+            //PassWord = ReadPassword();
+            Console.WriteLine($"\nYou Entered Password: {passWord}");
+
+            // get FileName
+            Console.WriteLine("\nFileName : ");
+            string fileName = Console.ReadLine();
+            Console.WriteLine($"\nYou Entered FileName: {fileName}");
+
+            myConnection.ServerName = serverName;
+            myConnection.UserName = userName;
+            myConnection.PassWord = passWord;
+            myConnection.FileName = fileName;
+
+        } // end getConnectionInformation
+
         #endregion
 
         static void Main(string[] args)
         {
             // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
-            Console.WriteLine("Welcome to FTP Client ");
+            Console.WriteLine("  Welcome to FTPClient \n");
             //Console.ReadKey();
 
             bool LetsContinueLoop=true;
@@ -90,7 +144,7 @@ namespace ftpClientConApp
             do
             {
                 DisplayMenu();
-                LetsContinueLoop = getResponce();
+                LetsContinueLoop = GetResponce();
 
             } while (LetsContinueLoop);
 
@@ -107,11 +161,11 @@ namespace ftpClientConApp
             Console.WriteLine("6) Change file permission on Remote Server");
             Console.WriteLine("7) Rename file on Remote Server");
             Console.WriteLine("8) ");
-            Console.WriteLine("9) Exit ftpClient ");
+            Console.WriteLine("9) Exit ftpClient \n");
 
         } // end DisplayMenu()
 
-        static public bool getResponce()
+        public static bool GetResponce()
         {
             string getAnswer = "";
             bool MyAnswer = true;
@@ -121,74 +175,48 @@ namespace ftpClientConApp
             {
                 case "9":
                     Console.WriteLine(" You choose 9, Good Bye \n");
-                    return MyAnswer = false;
+                    MyAnswer = false;
+                    break;
                 case "8":
                     Console.WriteLine(" You choose 8, We will get right on that!  \n");
-                    return MyAnswer = true;
+                    MyAnswer = true;
+                    break;
                 case "7":
                     Console.WriteLine(" You choose 7, We will get right on that!  \n");
-                    return MyAnswer = true;
+                    MyAnswer = true;
+                    break;
                 case "6":
                     Console.WriteLine(" You choose 6, We will get right on that!  \n");
-                    return MyAnswer = true;
+                    MyAnswer = true;
+                    break;
                 case "5":
-                    Console.WriteLine(" You choose 5, We will get right on that!  \n");
-                    return MyAnswer = true;
+                    Console.WriteLine(" You choose 5, Delete Files, We will get right on that!  \n");
+                    MyAnswer = true;
+                    break;
                 case "4":
-                    Console.WriteLine(" You choose 4, We will get right on that!  \n");
-                    return MyAnswer = true;
+                    Console.WriteLine(" You choose 4, Create Directory, We will get right on that!  \n");
+                    MyAnswer = true;
+                    break;
                 case "3":
                     Console.WriteLine(" You choose 3, Listing Remote Files \n");
-                    return MyAnswer = true;
+                    ServerConnectionInformation tmpConnection = new ServerConnectionInformation();
+                    GetConnectionInformation(ref tmpConnection);
+                    MyAnswer = false;
+                    break;
                 case "2":
-                    Console.WriteLine(" You choose 2, We will get right on that! \n");
-                    return MyAnswer = true;
+                    Console.WriteLine(" You choose 2, Put File, We will get right on that! \n");
+                    MyAnswer = true;
+                    break;
                 case "1":
-                    Console.WriteLine(" You choose 1, We will get right on that!  \n");
-                    //getConnectionInformation(UserName, PassWord, ServerName, FileName);
-                    return MyAnswer = true;
-
+                    Console.WriteLine(" You choose 1, Get File, We will get right on that!  \n");            
+                    MyAnswer = true;
+                    break;
                 default:
                     Console.WriteLine("\n\n That was not a valid input, Please try again ");
                     break;
             }
-
             return MyAnswer;
-        }
+        } // end getResponce()
 
-        //private static void getConnectionInformation(string userName, string passWord, string serverName, string fileName)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public static void getConnectionInformation(ref string UserName, ref string PassWord, ref string ServerName, ref string FileName)
-        public static void GetConnectionInformation(string UserName, string PassWord, string ServerName, string FileName)
-        {
-            Console.WriteLine("\nPlease provide the following information: ");
-
-            // get ServerName
-            Console.WriteLine("\nServer Name: ");
-            Console.WriteLine("\nExample serverName.xx.com ");
-            ServerName = Console.ReadLine();
-            Console.WriteLine($"\nYou Entered Server Name: {ServerName}");
-
-            // get UserName
-            Console.WriteLine("\nUser Name : ");
-            UserName = Console.ReadLine();
-            Console.WriteLine($"\nYou Entered User Name: {UserName}");
-
-            // get PassWord
-            Console.WriteLine("\nPassword : ");
-            PassWord = Console.ReadLine();
-            //PassWord = ReadPassword();
-            Console.WriteLine($"\nYou Entered Password: {PassWord}");
-
-            // get FileName
-            Console.WriteLine("\nFileName : ");
-            FileName = Console.ReadLine();
-            Console.WriteLine($"\nYou Entered FileName: {FileName}");
-
-        } // end getConnectionInformation
-
-    } // end class Program
+    } // end class ServerConnectionInformation
 } // end namespace ftpClientConApp
