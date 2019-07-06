@@ -81,7 +81,6 @@ namespace ftpClientConApp
 
         // #region Public Methods  
         /// Constructor
-        //public ServerConnectionInformation() : this(string.Empty, string.Empty, string.Empty, string.Empty) { }
         public ServerConnectionInformation()
         {
             ServerName = "";
@@ -104,17 +103,17 @@ namespace ftpClientConApp
 
             // get ServerName
             Console.WriteLine("Server Name: ");
-            Console.WriteLine("Example serverName.xx.com ");
+            Console.WriteLine("Example ftp://speedtest.tele2.net ");
             string serverName = Console.ReadLine();
             Console.WriteLine($"\nYou Entered Server Name: {serverName}");
 
             // get UserName
-            Console.WriteLine("\nUser Name : ");
+            Console.WriteLine("\nUser Name / anonymous : ");
             string userName = Console.ReadLine();
             Console.WriteLine($"\nYou Entered User Name: {userName}");
 
             // get PassWord
-            Console.WriteLine("\nPassword : ");
+            Console.WriteLine("\nPassword / anonymous : ");
             string passWord = Console.ReadLine();
             //PassWord = ReadPassword();
             Console.WriteLine($"\nYou Entered Password: {passWord}");
@@ -130,6 +129,33 @@ namespace ftpClientConApp
             myConnection.FileName = fileName;
 
         } // end getConnectionInformation
+
+        public static void GetConnectionInformationList(ref ServerConnectionInformation myConnection)
+        {
+            Console.WriteLine("\nPlease provide the following information: ");
+
+            // get ServerName
+            Console.WriteLine("Server Name: ");
+            Console.WriteLine("Example ftp://speedtest.tele2.net ");
+            string serverName = Console.ReadLine();
+            Console.WriteLine($"\nYou Entered Server Name: {serverName}");
+
+            // get UserName
+            Console.WriteLine("\nUser Name / anonymous : ");
+            string userName = Console.ReadLine();
+            Console.WriteLine($"\nYou Entered User Name: {userName}");
+
+            // get PassWord
+            Console.WriteLine("\nPassword / anonymous : ");
+            string passWord = Console.ReadLine();
+            //PassWord = ReadPassword();
+            Console.WriteLine($"\nYou Entered Password: {passWord}");
+
+            myConnection.ServerName = serverName;
+            myConnection.UserName = userName;
+            myConnection.PassWord = passWord;
+
+        } // end getConnectionInformationList
 
         #endregion
 
@@ -191,32 +217,117 @@ namespace ftpClientConApp
                     break;
                 case "5":
                     Console.WriteLine(" You choose 5, Delete Files, We will get right on that!  \n");
-                    MyAnswer = true;
+                    ServerConnectionInformation tmpConnectionC5 = new ServerConnectionInformation();
+                    GetConnectionInformation(ref tmpConnectionC5);
+                    //DeleteRemoteFile(tmpConnectionC5);
+                    MyAnswer = false;
                     break;
                 case "4":
                     Console.WriteLine(" You choose 4, Create Directory, We will get right on that!  \n");
-                    MyAnswer = true;
+                    ServerConnectionInformation tmpConnectionC4 = new ServerConnectionInformation();
+                    GetConnectionInformation(ref tmpConnectionC4);
+                    //CreateRemoteDirectory(tmpConnectionC4);
+                    MyAnswer = false;
                     break;
                 case "3":
                     Console.WriteLine(" You choose 3, Listing Remote Files \n");
-                    ServerConnectionInformation tmpConnection = new ServerConnectionInformation();
-                    GetConnectionInformation(ref tmpConnection);
-                    MyAnswer = false;
+                    ServerConnectionInformation tmpConnectionC3 = new ServerConnectionInformation();
+                    GetConnectionInformationList(ref tmpConnectionC3);
+                    ListRemoteDirectory(tmpConnectionC3);
+                    MyAnswer = false; 
                     break;
                 case "2":
                     Console.WriteLine(" You choose 2, Put File, We will get right on that! \n");
-                    MyAnswer = true;
+                    ServerConnectionInformation tmpConnectionC2 = new ServerConnectionInformation();
+                    GetConnectionInformation(ref tmpConnectionC2);
+                    UpLoadRemoteFile(tmpConnectionC2);
+                    MyAnswer = false;
                     break;
                 case "1":
-                    Console.WriteLine(" You choose 1, Get File, We will get right on that!  \n");            
-                    MyAnswer = true;
+                    Console.WriteLine(" You choose 1, Get File, We will get right on that!  \n");
+                    ServerConnectionInformation tmpConnectionC1 = new ServerConnectionInformation();
+                    GetConnectionInformation(ref tmpConnectionC1);
+                    //DownLoadRemoteFile(tmpConnectionC1);
+                    MyAnswer = false;
                     break;
                 default:
-                    Console.WriteLine("\n\n That was not a valid input, Please try again ");
+                    Console.WriteLine("\n That was not a valid input, Please try again \n");
                     break;
             }
             return MyAnswer;
         } // end getResponce()
+
+        public static void ListRemoteDirectory(ServerConnectionInformation myConnection)
+        {
+            // Get the object used to communicate with the server.
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(myConnection.ServerName);
+            request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+
+            // This example assumes the FTP site uses anonymous logon.
+            request.Credentials = new NetworkCredential(myConnection.UserName, myConnection.PassWord);
+
+            FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(responseStream);
+            Console.WriteLine(reader.ReadToEnd());
+
+            Console.WriteLine($"Directory List Complete, status {response.StatusDescription}");
+
+            reader.Close();
+            response.Close();
+        } // end ListRemoteDirectory()
+
+        public static void UpLoadRemoteFile(ServerConnectionInformation myConnection)
+        {
+            // Get the object used to communicate with the server.
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(myConnection.ServerName);
+            request.Method = WebRequestMethods.Ftp.UploadFile;
+
+            // This example assumes the FTP site uses anonymous logon.
+            request.Credentials = new NetworkCredential(myConnection.UserName, myConnection.PassWord);
+
+            // Copy the contents of the file to the request stream.
+            byte[] fileContents;
+            using (StreamReader sourceStream = new StreamReader(myConnection.FileName ))
+            {
+                fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
+            }
+
+            request.ContentLength = fileContents.Length;
+
+            using (Stream requestStream = request.GetRequestStream())
+            {
+                requestStream.Write(fileContents, 0, fileContents.Length);
+            }
+
+            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            {
+                Console.WriteLine($"Upload File Complete, status {response.StatusDescription}");
+            }
+
+        } // end UpLoadRemoteFile()
+
+        public static void DownLoadRemoteFile(ServerConnectionInformation myConnection)
+        {
+            // Get the object used to communicate with the server.
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(myConnection.ServerName);
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+
+            request.Credentials = new NetworkCredential(myConnection.UserName, myConnection.PassWord);
+
+            FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(responseStream);
+            Console.WriteLine(reader.ReadToEnd());
+
+            Console.WriteLine($"Download Complete, status {response.StatusDescription}");
+
+            reader.Close();
+            response.Close();
+
+        } // end DownLoadRemoteFile()
 
     } // end class ServerConnectionInformation
 } // end namespace ftpClientConApp
