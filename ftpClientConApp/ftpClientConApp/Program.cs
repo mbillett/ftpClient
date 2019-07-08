@@ -105,6 +105,7 @@ namespace ftpClientConApp
             LocalFilePath = localFilePath;
         }
 
+        // general 
         public static void GetConnectionInformation(ref ServerConnectionInformation myConnection )
         {
             bool LetsContinueLoop = true;
@@ -289,8 +290,6 @@ namespace ftpClientConApp
             return MyAnswer;
         } // end getResponce()
 
-
-
 // Down Load Remote File
         public static void GetConnectionInformationDLF(ref ServerConnectionInformation myConnection)
         {
@@ -299,35 +298,29 @@ namespace ftpClientConApp
             string serverName = "ftp://speedtest.tele2.net/512KB.zip";
             string userName = "anonymous";
             string passWord = "anonymous";
-            string fileName = "512KB.zip";
             string localFilePath = "c:\\download\\512KB.zip";
 
             do
             {
                 Console.WriteLine("\nPlease provide the following information: ");
-
                 Console.WriteLine("Server Name: ");
                 Console.WriteLine("Example ftp://speedtest.tele2.net/512KB.zip ");
-                ///serverName = Console.ReadLine();
+                serverName = Console.ReadLine();
 
                 Console.WriteLine("\nUser Name / anonymous : ");
-                ////userName = Console.ReadLine();
+                userName = Console.ReadLine();
 
                 Console.WriteLine("\nPassword / anonymous : ");
-                ////passWord = Console.ReadLine();
+                passWord = Console.ReadLine();
                 //PassWord = ReadPassword();
 
-                Console.WriteLine("\nFileName : ");
-                //fileName = Console.ReadLine();
-
                 Console.WriteLine("\nLocal Path and FileName : ");
-                Console.WriteLine("Example c:\\download\\512KB.zip ");
-                //localFilePath = Console.ReadLine();
+                Console.WriteLine("Example c:/download/512KB.zip , note directory must already exist");
+                localFilePath = Console.ReadLine();
 
                 Console.WriteLine($"\nYou Entered Server Name: {serverName}");
                 Console.WriteLine($"\nYou Entered User Name: {userName}");
                 Console.WriteLine($"\nYou Entered Password: {passWord}");
-                Console.WriteLine($"\nYou Entered FileName: {fileName}");
                 Console.WriteLine($"\nYou Entered Local Path and File Name: {localFilePath}");
                 Console.WriteLine($"\n Y or y to accept and continue. ");
                 myAnswer = Console.ReadLine();
@@ -338,44 +331,49 @@ namespace ftpClientConApp
             myConnection.ServerName = serverName;
             myConnection.UserName = userName;
             myConnection.PassWord = passWord;
-            myConnection.FileName = fileName;
             myConnection.localFilePath = localFilePath;
 
-        } // end getConnectionInformation
+        } // end getConnectionInformationDLF
+
+        public static FtpWebRequest CreateFtpWebRequest(string ftpDirectoryPath, string userName, string password, bool keepAlive = false)
+        {
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri(ftpDirectoryPath));
+
+            //Set proxy to null. Under current configuration if this option is not set then the proxy that is used will get an html response from the web content gateway (firewall monitoring system)
+            request.Proxy = null;
+
+            request.UsePassive = true;
+            request.UseBinary = true;
+            request.KeepAlive = keepAlive;
+
+            request.Credentials = new NetworkCredential(userName, password);
+
+            return request;
+        } // end CreateFtpWebRequest()
 
         public static void DownLoadRemoteFile(ServerConnectionInformation myConnection)
         {
             try
             {
-                // Get the object used to communicate with the server.
-                //FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://ftp.example.com/remote/path/file.zip");
-                Console.WriteLine($" Server Connection Requested: {myConnection.ServerName} ");
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(myConnection.ServerName);
-                request.Credentials = new NetworkCredential(myConnection.UserName, myConnection.PassWord);
+                int bytesRead = 0;
+                byte[] buffer = new byte[2048];
+
+                FtpWebRequest request = CreateFtpWebRequest(myConnection.ServerName, myConnection.UserName, myConnection.PassWord, true);
                 request.Method = WebRequestMethods.Ftp.DownloadFile;
 
-                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-                //Stream responseStream = response.GetResponseStream();
-                //StreamReader reader = new StreamReader(responseStream);
-                //string localPathFile = "c:\\download\\" + myConnection.FileName;
-                using (Stream ftpStream = response.GetResponseStream())
-                //////using (StreamReader fileStream = File.Create(path: @${ myConnection.LocalFilePath}))
-                {
-                    //byte[] buffer = new byte[10240];
-                    // int read;
-                    //while ((read = ftpStream.Read(buffer, 0, buffer.Length)) > 0)
-                    //{
-                    //    fileStream.Write(buffer, 0, read);
-                    //    Console.WriteLine("Downloaded {0} bytes", fileStream.Position);
-                    //}
+                Stream reader = request.GetResponse().GetResponseStream();
+                FileStream fileStream = new FileStream(myConnection.LocalFilePath, FileMode.Create);
 
-                    //Console.WriteLine(reader.ReadToEnd());
-                    //////Console.WriteLine(fileStream.ReadToEnd());
-                    Console.WriteLine($"Download Complete, status {response.StatusDescription}");
-                    // reader.Close();
-                    //////fileStream.Close();
-                    response.Close();
+                while (true)
+                {
+                    bytesRead = reader.Read(buffer, 0, buffer.Length);
+
+                    if (bytesRead == 0)
+                        break;
+
+                    fileStream.Write(buffer, 0, bytesRead);
                 }
+                fileStream.Close();       
             }
             catch (UriFormatException e)
             {
