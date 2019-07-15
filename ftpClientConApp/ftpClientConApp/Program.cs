@@ -378,10 +378,12 @@ namespace ftpClientConApp
             catch (UriFormatException e)
             {
                 Console.WriteLine("\n Exception Invalid URI Empty Credentials: {0}", e.ToString());
+                throw;
             }
             catch (Exception e)
             {
                 Console.WriteLine("\n Generic Exception Handler: {0}", e.ToString());
+                throw;
             }
         } // end DownLoadRemoteFile()
 
@@ -453,6 +455,7 @@ namespace ftpClientConApp
             catch (Exception e)
             {
                 Console.WriteLine("\n Generic Exception Handler: {0}", e.ToString());
+                throw;
             }
         } // end ListRemoteDirectory()
 
