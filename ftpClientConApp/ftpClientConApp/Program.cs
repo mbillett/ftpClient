@@ -267,7 +267,7 @@ namespace ftpClientConApp
                     ServerConnectionInformation tmpConnectionC3 = new ServerConnectionInformation();
                     GetConnectionInformationList(ref tmpConnectionC3);
                     ListRemoteDirectory(tmpConnectionC3);
-                    MyAnswer = false; 
+                    MyAnswer = true; 
                     break;
                 case "2":
                     Console.WriteLine(" You choose 2, Put File, We will get right on that! \n");
@@ -281,7 +281,7 @@ namespace ftpClientConApp
                     ServerConnectionInformation tmpConnectionC1 = new ServerConnectionInformation();
                     GetConnectionInformationDLF(ref tmpConnectionC1);
                     DownLoadRemoteFile(tmpConnectionC1);
-                    MyAnswer = false;
+                    MyAnswer = true;
                     break;
                 default:
                     Console.WriteLine("\n That was not a valid input, Please try again \n");
@@ -430,6 +430,8 @@ namespace ftpClientConApp
         {
             try
             {
+                //Note from Bryan: I am concerned about this code. It looks copied from an example. What about other code?
+
                 // Get the object used to communicate with the server.
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(myConnection.ServerName);
                 request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
