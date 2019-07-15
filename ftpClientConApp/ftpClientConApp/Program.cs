@@ -260,6 +260,8 @@ namespace ftpClientConApp
                     ServerConnectionInformation tmpConnectionC4 = new ServerConnectionInformation();
                     GetConnectionInformation(ref tmpConnectionC4);
                     //CreateRemoteDirectory(tmpConnectionC4);
+                    CreateRemoteDirectory createRemDir = new CreateRemoteDirectory(ref tmpConnectionC4);
+                    
                     MyAnswer = true;
                     break;
                 case "3":
