@@ -258,10 +258,16 @@ namespace ftpClientConApp
                 case "4":
                     Console.WriteLine(" You choose 4, Create Directory, We will get right on that!  \n");
                     ServerConnectionInformation tmpConnectionC4 = new ServerConnectionInformation();
-                    GetConnectionInformation(ref tmpConnectionC4);
-                    //CreateRemoteDirectory(tmpConnectionC4);
-                    CreateRemoteDirectory createRemDir = new CreateRemoteDirectory(ref tmpConnectionC4);
-                    
+                    GetConnectionInformationList(ref tmpConnectionC4);
+                    CreateRemoteDirectory createRemDir = new CreateRemoteDirectory(tmpConnectionC4 );
+                    bool response = createRemDir.create();
+                    if(response == true)
+                    {
+                        Console.Write("Directory Created\n");
+                    } else
+                    {
+                        Console.Write("Could not create directory\n");
+                    }
                     MyAnswer = true;
                     break;
                 case "3":
