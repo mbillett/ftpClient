@@ -236,8 +236,11 @@ namespace ftpClientConApp
                     Console.WriteLine(" You choose 9, Good Bye \n");
                     MyAnswer = false;
                     break;
-                case "8":
-                    Console.WriteLine(" You choose 8, We will get right on that!  \n");
+                 case "8":
+                    Console.WriteLine(" You choose 8, Logging out connection!  \n");
+                    ServerConnectionInformation tmpConnectionC8 = new ServerConnectionInformation();
+                    GetConnectionInformation(ref tmpConnectionC8);
+                    Closemyconnection(tmpConnectionC8);
                     MyAnswer = true;
                     break;
                 case "7":
@@ -454,6 +457,32 @@ namespace ftpClientConApp
                 Console.WriteLine("\n Generic Exception Handler: {0}", e.ToString());
             }
         } // end ListRemoteDirectory()
+        
+         //Closing & logout from connection
+        public static void Closemyconnection(ServerConnectionInformation myConnection)
+         {
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(myConnection.ServerName);
+
+            // Check file exist 
+            try
+            {
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
+                request.KeepAlive = false;
+                reader.Close();
+                response.Close();
+                request = null;
+            }
+            catch (WebException ex)
+            {
+                FtpWebResponse response = (FtpWebResponse)ex.Response;
+                if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                {
+                    //File not exist
+                }
+            }
+        }
 
     } // end class ServerConnectionInformation
 } // end namespace ftpClientConApp
