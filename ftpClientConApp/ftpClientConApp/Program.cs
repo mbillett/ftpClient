@@ -23,7 +23,7 @@ using System.Threading;  // password
 
 namespace ftpClientConApp
 {
-    class ServerConnectionInformation
+    public class ServerConnectionInformation
     {
         #region Private Member Variables
         private string userName;

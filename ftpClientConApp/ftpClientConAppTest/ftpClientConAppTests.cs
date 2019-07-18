@@ -9,25 +9,32 @@ namespace ftpClientTests
     public class ftpClientConAppTests
     {
         private const string USERNAME = "anonymous";
+        private const string PASSWORD = "anonymous";
+        private const string SERVERNAME = "ftp://speedtest.tele2.net";
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestuserName()
         {
-            //string UserName = "anonymous";
-            //string PassWord = "anonymous";
-            //string ServerName = "ftp://speedtest.tele2.net";
-            //ServerConnectionInformation MyConnection = new ServerConnectionInformation;
-            //MyConnection = CreateServerConnection(ServerName, UserName, PassWord, "", "");
+            ftpClientConApp.ServerConnectionInformation MyConnection = new ftpClientConApp.ServerConnectionInformation();
+            MyConnection.UserName = "anonymous";
 
+            Assert.AreEqual(USERNAME, MyConnection.UserName);
+        }
+        [TestMethod]
+        public void TestPassWord()
+        {
+            ftpClientConApp.ServerConnectionInformation MyConnection = new ftpClientConApp.ServerConnectionInformation();
+            MyConnection.PassWord = "anonymous";
 
-            //using (var sw = new StringWriter())
-            //{
-            //Console.SetOut(sw);
-            
-            //var result = sw.ToString().Trim();
-            //Assert.AreEqual(USERNAME, result);
-            //}
+            Assert.AreEqual(PASSWORD, MyConnection.PassWord);
+        }
+        [TestMethod]
+        public void TestServerName()
+        {
+            ftpClientConApp.ServerConnectionInformation MyConnection = new ftpClientConApp.ServerConnectionInformation();
+            MyConnection.ServerName = "ftp://speedtest.tele2.net";
 
+            Assert.AreEqual(SERVERNAME, MyConnection.ServerName);
         }
     }
 }
