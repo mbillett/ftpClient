@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ftpClientConApp
 {
@@ -36,25 +33,33 @@ namespace ftpClientConApp
         //Otherwise the string will contain a relevant error message.
         public String create(String dir)
         {
+            //check for invalid characters
+            char[] invalid = new char[] { ',', '<', '>', '|', '.' };
+
+            for (int i = 0; i < invalid.Length; i++)
+            {
+                if (dir.Contains(invalid[i]))
+                {
+                    return "Directory name contained invalid character: " + invalid[i];
+                }
+            }
+
+            //make request
             String remoteDir = this.connection.ServerName + '/' + dir;
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create(remoteDir);
             request.Credentials = new NetworkCredential(this.connection.UserName, this.connection.PassWord);
             request.Method = WebRequestMethods.Ftp.MakeDirectory;
+
+            //Handle response
             try
             {
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
             } catch (WebException e)
-            {
-                if(e.Status == WebExceptionStatus.ServerProtocolViolation)
-                {
-                    if(((FtpWebResponse)e.Response).StatusCode.Equals("550") == true)
-                    {
-                        return "You did not have permission to create the directory";
-                    } 
-                }
-              
-
+            { 
                 return e.Message;
+            } catch (UriFormatException e)
+            {
+                return "Poorly formatted URI. Please enter a valid directory name";
             }
             
             return "success";
