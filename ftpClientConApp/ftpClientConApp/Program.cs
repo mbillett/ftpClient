@@ -260,13 +260,14 @@ namespace ftpClientConApp
                     ServerConnectionInformation tmpConnectionC4 = new ServerConnectionInformation();
                     GetConnectionInformationList(ref tmpConnectionC4);
                     CreateRemoteDirectory createRemDir = new CreateRemoteDirectory(tmpConnectionC4 );
-                    bool response = createRemDir.create();
-                    if(response == true)
+                    String directory = createRemDir.getDirectoryName();
+                    String response = createRemDir.create(directory);
+                    if(response == "success")
                     {
                         Console.Write("Directory Created\n");
                     } else
                     {
-                        Console.Write("Could not create directory\n");
+                        Console.Write("Could not create directory\nEncountered error: " + response + "\n");
                     }
                     MyAnswer = true;
                     break;
