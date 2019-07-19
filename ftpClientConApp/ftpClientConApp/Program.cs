@@ -345,6 +345,8 @@ namespace ftpClientConApp
 
         public static FtpWebRequest CreateFtpWebRequest(string ftpDirectoryPath, string userName, string password, bool keepAlive = false)
         {
+             //// Credit
+            ////https://stackoverflow.com/questions/12519290/downloading-files-using-ftpwebrequest
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri(ftpDirectoryPath));
 
             //Set proxy to null. Under current configuration if this option is not set then the proxy that is used will get an html response from the web content gateway (firewall monitoring system)
@@ -361,6 +363,8 @@ namespace ftpClientConApp
 
         public static void DownLoadRemoteFile(ServerConnectionInformation myConnection)
         {
+             //// Credit
+            ////https://stackoverflow.com/questions/12519290/downloading-files-using-ftpwebrequest
             try
             {
                 int bytesRead = 0;
@@ -436,6 +440,8 @@ namespace ftpClientConApp
 
         public static void ListRemoteDirectory(ServerConnectionInformation myConnection)
         {
+            //credit
+            //https://stackoverflow.com/questions/41110384/list-names-of-files-in-ftp-directory-and-its-subdirectories
             try
             {
                 //Note from Bryan: I am concerned about this code. It looks copied from an example. What about other code?
