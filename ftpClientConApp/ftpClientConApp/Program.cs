@@ -1,5 +1,5 @@
 /**
- * CS 410 Agile Developement Summer 2019 
+ * CS 410/510 Agile Developement Summer 2019 
  * Team #7 
  * Ftp Client Project 
  * 
@@ -190,6 +190,25 @@ namespace ftpClientConApp
             }
         } // end UpLoadRemoteFile()
 
+        public static bool DeleteRemoteFile(Uri serverUri){
+            //Source: https://docs.microsoft.com/en-us/dotnet/api/system.net.ftpwebrequest?view=netframework-4.8
+
+            if(serverUri.Scheme == Uri.UriSchemeFtp){
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverUri);
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+ 
+                FtpWebResponse response = (FtpWebResponse) request.GetResponse();
+                Console.WriteLine("Delete status: {0}",response.StatusDescription);  
+                response.Close();
+                
+                return true;
+            }
+
+            else{
+                return false;
+            }
+        }
+
         #endregion
 
         static void Main(string[] args)
@@ -249,10 +268,15 @@ namespace ftpClientConApp
                     MyAnswer = true;
                     break;
                 case "5":
-                    Console.WriteLine(" You choose 5, Delete Files, We will get right on that!  \n");
-                    ServerConnectionInformation tmpConnectionC5 = new ServerConnectionInformation();
-                    GetConnectionInformation(ref tmpConnectionC5);
+                    //Console.WriteLine(" You choose 5, Delete Files, We will get right on that!  \n");
+                    //ServerConnectionInformation tmpConnectionC5 = new ServerConnectionInformation();
+                   // GetConnectionInformation(ref tmpConnectionC5);
                     //DeleteRemoteFile(tmpConnectionC5);
+                    Console.WriteLine(" You choose 5, Enter the file you wish to delete: \n");
+                    Console.WriteLine(" Example: ftp://speedtest.tele2.net/filename.cs  \n");
+                    string input = Console.ReadLine();
+                    Uri target = new Uri(input);
+                    DeleteRemoteFile(target);
                     MyAnswer = true;
                     break;
                 case "4":
