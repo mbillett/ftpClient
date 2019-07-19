@@ -267,7 +267,7 @@ namespace ftpClientConApp
                         Console.Write("Directory Created\n");
                     } else
                     {
-                        Console.Write("Could not create directory\nEncountered error: " + response + "\n");
+                        Console.Write("Could not create directory due to an error.\n" + response + "\n");
                     }
                     MyAnswer = true;
                     break;
