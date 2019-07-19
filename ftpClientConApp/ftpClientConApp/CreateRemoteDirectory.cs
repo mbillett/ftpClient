@@ -6,7 +6,7 @@ namespace ftpClientConApp
 {
     //Class for creating a directory on the remote FTP server with its necessary functionality and data.
     //Works off of the functions provided in Program.cs
-    class CreateRemoteDirectory
+    public class CreateRemoteDirectory
     {
         //A ServerConnectionInformation variable to keep track of the user and server for the use of an instance of this class.
         private ServerConnectionInformation connection;
