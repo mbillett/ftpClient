@@ -9,13 +9,13 @@ run the code from there. <br><br>
 Or from the command line, compile the program.cs file:
 
 ```
-$ csc program.cs
+$ csc Program.cs
 ```
 
 and then run it:
 
 ```
-$ mono program.exe
+$ mono Program.exe
 ```
 
 ## Sources
