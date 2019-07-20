@@ -23,7 +23,7 @@ using System.Threading;  // password
 
 namespace ftpClientConApp
 {
-    class ServerConnectionInformation
+    public class ServerConnectionInformation
     {
         #region Private Member Variables
         private string userName;
@@ -258,8 +258,17 @@ namespace ftpClientConApp
                 case "4":
                     Console.WriteLine(" You choose 4, Create Directory, We will get right on that!  \n");
                     ServerConnectionInformation tmpConnectionC4 = new ServerConnectionInformation();
-                    GetConnectionInformation(ref tmpConnectionC4);
-                    //CreateRemoteDirectory(tmpConnectionC4);
+                    GetConnectionInformationList(ref tmpConnectionC4);
+                    CreateRemoteDirectory createRemDir = new CreateRemoteDirectory(tmpConnectionC4 );
+                    String directory = createRemDir.getDirectoryName();
+                    String response = createRemDir.create(directory);
+                    if(response == "success")
+                    {
+                        Console.Write("Directory Created\n");
+                    } else
+                    {
+                        Console.Write("Could not create directory due to an error.\n" + response + "\n");
+                    }
                     MyAnswer = true;
                     break;
                 case "3":
@@ -267,7 +276,7 @@ namespace ftpClientConApp
                     ServerConnectionInformation tmpConnectionC3 = new ServerConnectionInformation();
                     GetConnectionInformationList(ref tmpConnectionC3);
                     ListRemoteDirectory(tmpConnectionC3);
-                    MyAnswer = false; 
+                    MyAnswer = true; 
                     break;
                 case "2":
                     Console.WriteLine(" You choose 2, Put File, We will get right on that! \n");
@@ -281,7 +290,7 @@ namespace ftpClientConApp
                     ServerConnectionInformation tmpConnectionC1 = new ServerConnectionInformation();
                     GetConnectionInformationDLF(ref tmpConnectionC1);
                     DownLoadRemoteFile(tmpConnectionC1);
-                    MyAnswer = false;
+                    MyAnswer = true;
                     break;
                 default:
                     Console.WriteLine("\n That was not a valid input, Please try again \n");
@@ -382,10 +391,12 @@ namespace ftpClientConApp
             catch (UriFormatException e)
             {
                 Console.WriteLine("\n Exception Invalid URI Empty Credentials: {0}", e.ToString());
+                throw;
             }
             catch (Exception e)
             {
                 Console.WriteLine("\n Generic Exception Handler: {0}", e.ToString());
+                throw;
             }
         } // end DownLoadRemoteFile()
 
@@ -434,6 +445,8 @@ namespace ftpClientConApp
             //https://stackoverflow.com/questions/41110384/list-names-of-files-in-ftp-directory-and-its-subdirectories
             try
             {
+                //Note from Bryan: I am concerned about this code. It looks copied from an example. What about other code?
+
                 // Get the object used to communicate with the server.
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(myConnection.ServerName);
                 request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
@@ -454,10 +467,12 @@ namespace ftpClientConApp
             catch (UriFormatException e)
             {
                 Console.WriteLine("\n Exception Invalid URI Empty Credentials: {0}", e.ToString());
+                throw;
             }
             catch (Exception e)
             {
                 Console.WriteLine("\n Generic Exception Handler: {0}", e.ToString());
+                throw;
             }
         } // end ListRemoteDirectory()
 
