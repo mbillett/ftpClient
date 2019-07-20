@@ -124,7 +124,7 @@ namespace ftpClientConApp
             string serverName = "ftp://speedtest.tele2.net/512KB.zip";
             string userName = "anonymous";
             string passWord = "anonymous";
-            //string fileName = "512KB.zip";
+            string fileName = "512KB.zip";
             string localFilePath = "c:/download/bambi.txt";
 
             do
@@ -202,7 +202,7 @@ namespace ftpClientConApp
             // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
             Console.WriteLine("  Welcome to FTPClient \n");
 
-            bool LetsContinueLoop = true;
+            bool LetsContinueLoop=true;
 
             do
             {
@@ -224,7 +224,7 @@ namespace ftpClientConApp
             Console.WriteLine("5) Delete file on Remote Server");
             Console.WriteLine("6) Change file permission on Remote Server");
             Console.WriteLine("7) Rename file on Remote Server");
-            Console.WriteLine("8) ");
+            Console.WriteLine("8) Room for expantion");
             Console.WriteLine("9) Exit ftpClient \n");
 
         } // end DisplayMenu()
@@ -255,16 +255,25 @@ namespace ftpClientConApp
                     break;
                 case "5":
                     Console.WriteLine(" You choose 5, Delete Files, We will get right on that!  \n");
-                    ServerConnectionInformation tmpConnectionC5 = new ServerConnectionInformation();
-                    GetConnectionInformation(ref tmpConnectionC5);
+                    //ServerConnectionInformation tmpConnectionC5 = new ServerConnectionInformation();
+                    //GetConnectionInformation(ref tmpConnectionC5);
                     //DeleteRemoteFile(tmpConnectionC5);
                     MyAnswer = true;
                     break;
                 case "4":
-                    Console.WriteLine(" You choose 4, Create Directory, We will get right on that!  \n");
+                    Console.WriteLine(" You choose 4, Create Directory!  \n");
                     ServerConnectionInformation tmpConnectionC4 = new ServerConnectionInformation();
-                    GetConnectionInformation(ref tmpConnectionC4);
-                    //CreateRemoteDirectory(tmpConnectionC4);
+                    GetConnectionInformationList(ref tmpConnectionC4);
+                    CreateRemoteDirectory createRemDir = new CreateRemoteDirectory(tmpConnectionC4 );
+                    String directory = createRemDir.getDirectoryName();
+                    String response = createRemDir.create(directory);
+                    if(response == "success")
+                    {
+                        Console.Write("Directory Created\n");
+                    } else
+                    {
+                        Console.Write("Could not create directory due to an error.\n" + response + "\n");
+                    }
                     MyAnswer = true;
                     break;
                 case "3":
@@ -272,21 +281,21 @@ namespace ftpClientConApp
                     ServerConnectionInformation tmpConnectionC3 = new ServerConnectionInformation();
                     GetConnectionInformationList(ref tmpConnectionC3);
                     ListRemoteDirectory(tmpConnectionC3);
-                    MyAnswer = false;
+                    MyAnswer = true;
                     break;
                 case "2":
-                    Console.WriteLine(" You choose 2, Put File, We will get right on that! \n");
+                    Console.WriteLine(" You choose 2, Put File! \n");
                     ServerConnectionInformation tmpConnectionC2 = new ServerConnectionInformation();
                     GetConnectionInformation(ref tmpConnectionC2);
                     UpLoadRemoteFile(tmpConnectionC2);
                     MyAnswer = true;
                     break;
                 case "1":
-                    Console.WriteLine(" You choose 1, Get File, We will get right on that!  \n");
+                    Console.WriteLine(" You choose 1, Get File!  \n");
                     ServerConnectionInformation tmpConnectionC1 = new ServerConnectionInformation();
                     GetConnectionInformationDLF(ref tmpConnectionC1);
                     DownLoadRemoteFile(tmpConnectionC1);
-                    MyAnswer = false;
+                    MyAnswer = true;
                     break;
                 default:
                     Console.WriteLine("\n That was not a valid input, Please try again \n");
@@ -337,7 +346,7 @@ namespace ftpClientConApp
 
         public static FtpWebRequest CreateFtpWebRequest(string ftpDirectoryPath, string userName, string password, bool keepAlive = false)
         {
-            //// Credit 
+             //// Credit
             ////https://stackoverflow.com/questions/12519290/downloading-files-using-ftpwebrequest
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create(new Uri(ftpDirectoryPath));
 
@@ -355,7 +364,7 @@ namespace ftpClientConApp
 
         public static void DownLoadRemoteFile(ServerConnectionInformation myConnection)
         {
-            //// Credit
+             //// Credit
             ////https://stackoverflow.com/questions/12519290/downloading-files-using-ftpwebrequest
             try
             {
@@ -382,10 +391,12 @@ namespace ftpClientConApp
             catch (UriFormatException e)
             {
                 Console.WriteLine("\n Exception Invalid URI Empty Credentials: {0}", e.ToString());
+                throw;
             }
             catch (Exception e)
             {
                 Console.WriteLine("\n Generic Exception Handler: {0}", e.ToString());
+                throw;
             }
         } // end DownLoadRemoteFile()
 
@@ -516,6 +527,8 @@ namespace ftpClientConApp
             //https://stackoverflow.com/questions/41110384/list-names-of-files-in-ftp-directory-and-its-subdirectories
             try
             {
+                //Note from Bryan: I am concerned about this code. It looks copied from an example. What about other code?
+		        // Note from Marcella code verified ok With Professor
                 // Get the object used to communicate with the server.
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(myConnection.ServerName);
                 request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
@@ -536,10 +549,12 @@ namespace ftpClientConApp
             catch (UriFormatException e)
             {
                 Console.WriteLine("\n Exception Invalid URI Empty Credentials: {0}", e.ToString());
+                throw;
             }
             catch (Exception e)
             {
                 Console.WriteLine("\n Generic Exception Handler: {0}", e.ToString());
+                throw;
             }
         } // end ListRemoteDirectory()
 
