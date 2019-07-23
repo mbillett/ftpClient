@@ -130,6 +130,25 @@ namespace ftpClientConApp
 
         
 
+        public static bool DeleteRemoteFile(Uri serverUri){
+            //Source: https://docs.microsoft.com/en-us/dotnet/api/system.net.ftpwebrequest?view=netframework-4.8
+
+            if(serverUri.Scheme == Uri.UriSchemeFtp){
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverUri);
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+ 
+                FtpWebResponse response = (FtpWebResponse) request.GetResponse();
+                Console.WriteLine("Delete status: {0}",response.StatusDescription);  
+                response.Close();
+                
+                return true;
+            }
+
+            else{
+                return false;
+            }
+        }
+
         #endregion
 
         static void Main(string[] args)
@@ -139,8 +158,7 @@ namespace ftpClientConApp
 
             bool LetsContinueLoop=true;
 
-            ServerConnectionInformation 
-
+        
             do
             {
                 DisplayMenu();
@@ -192,6 +210,7 @@ namespace ftpClientConApp
                     break;
                 case "5":
                     Console.WriteLine(" Not Implemented Yet  \n");
+
                     MyAnswer = true;
                     break;
                 case "4":
