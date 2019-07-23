@@ -106,7 +106,7 @@ namespace ftpClientConApp
         }
 
         // general 
-        public static void GetConnectionInformation(ref ServerConnectionInformation myConnection )
+        public static void GetConnectionInformation(ref ServerConnectionInformation myConnection)
         {
             bool LetsContinueLoop = true;
             string myAnswer = "";
@@ -114,30 +114,24 @@ namespace ftpClientConApp
             string userName = "anonymous";
             string passWord = "anonymous";
             string fileName = "512KB.zip";
-            //string localFilePath = "c:\\Download\\";
+            string localFilePath = "c:/download/bambi.txt";
 
             do
             {
                 Console.WriteLine("\nPlease provide the following information: ");
-
                 Console.WriteLine("Server Name: ");
-                Console.WriteLine("Example ftp://speedtest.tele2.net ");
-                serverName = Console.ReadLine();
-
-                Console.WriteLine("\nUser Name / anonymous : ");
-                userName = Console.ReadLine();
-
-                Console.WriteLine("\nPassword / anonymous : ");
-                passWord = Console.ReadLine();
-                //PassWord = ReadPassword(); // not included yet
-
-                Console.WriteLine("\nFileName : ");
-                fileName = Console.ReadLine();
+                Console.WriteLine("Example ftp://speedtest.tele2.net/upload ");
+                serverName = getServerName();
+                userName = getUserName();
+                passWord = getPassWord();
+                Console.WriteLine("\nLocal Path and FileName : ");
+                Console.WriteLine("Example c:/download/bambi.txt , note directory must already exist");
+                localFilePath = getLocalFilePath();
 
                 Console.WriteLine($"\nYou Entered Server Name: {serverName}");
                 Console.WriteLine($"\nYou Entered User Name: {userName}");
                 Console.WriteLine($"\nYou Entered Password: {passWord}");
-                Console.WriteLine($"\nYou Entered FileName: {fileName}");
+                Console.WriteLine($"\nYou Entered FileName: {localFilePath}");
                 Console.WriteLine($"\n Y or y to accept and continue. ");
                 myAnswer = Console.ReadLine();
                 if (myAnswer == "Y" || myAnswer == "y") { LetsContinueLoop = false; }
@@ -147,22 +141,21 @@ namespace ftpClientConApp
             myConnection.ServerName = serverName;
             myConnection.UserName = userName;
             myConnection.PassWord = passWord;
-            myConnection.FileName = fileName;
+            myConnection.FileName = localFilePath;
 
         } // end getConnectionInformation
 
         public static void UpLoadRemoteFile(ServerConnectionInformation myConnection)
-        {
+        { //https://stackoverflow.com/questions/19124633/c-sharp-ftp-upload-and-download
             try
             {
                 // Get the object used to communicate with the server.
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(myConnection.ServerName);
                 request.Method = WebRequestMethods.Ftp.UploadFile;
 
-                // This example assumes the FTP site uses anonymous logon.
                 request.Credentials = new NetworkCredential(myConnection.UserName, myConnection.PassWord);
 
-                // Copy the contents of the file to the request stream.
+                // Copy file to the request stream.
                 byte[] fileContents;
                 using (StreamReader sourceStream = new StreamReader(myConnection.FileName))
                 {
@@ -177,7 +170,7 @@ namespace ftpClientConApp
                 }
                 using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
                 {
-                    Console.WriteLine($"Upload File Complete, status {response.StatusDescription}");
+                    Console.WriteLine($"Your File upload has Completed, status {response.StatusDescription}");
                 }
             }
             catch (UriFormatException e)
@@ -188,6 +181,7 @@ namespace ftpClientConApp
             {
                 Console.WriteLine("\n Generic Exception Handler: {0}", e.ToString());
             }
+            // add error catch Generic Exception Handler: System.Net.WebException: The remote server returned an error: (553) File name not allowed.
         } // end UpLoadRemoteFile()
 
         public static bool DeleteRemoteFile(Uri serverUri){
@@ -238,7 +232,7 @@ namespace ftpClientConApp
             Console.WriteLine("5) Delete file on Remote Server");
             Console.WriteLine("6) Change file permission on Remote Server");
             Console.WriteLine("7) Rename file on Remote Server");
-            Console.WriteLine("8) ");
+            Console.WriteLine("8) Room for expantion");
             Console.WriteLine("9) Exit ftpClient \n");
 
         } // end DisplayMenu()
@@ -248,7 +242,7 @@ namespace ftpClientConApp
             string getAnswer = "";
             bool MyAnswer = true;
             getAnswer = Console.ReadLine();
- 
+
             switch (getAnswer)
             {
                 case "9":
@@ -268,10 +262,6 @@ namespace ftpClientConApp
                     MyAnswer = true;
                     break;
                 case "5":
-                    //Console.WriteLine(" You choose 5, Delete Files, We will get right on that!  \n");
-                    //ServerConnectionInformation tmpConnectionC5 = new ServerConnectionInformation();
-                   // GetConnectionInformation(ref tmpConnectionC5);
-                    //DeleteRemoteFile(tmpConnectionC5);
                     Console.WriteLine(" You choose 5, Enter the file you wish to delete: \n");
                     Console.WriteLine(" Example: ftp://speedtest.tele2.net/filename.cs  \n");
                     string input = Console.ReadLine();
@@ -280,7 +270,7 @@ namespace ftpClientConApp
                     MyAnswer = true;
                     break;
                 case "4":
-                    Console.WriteLine(" You choose 4, Create Directory, We will get right on that!  \n");
+                    Console.WriteLine(" You choose 4, Create Directory!  \n");
                     ServerConnectionInformation tmpConnectionC4 = new ServerConnectionInformation();
                     GetConnectionInformationList(ref tmpConnectionC4);
                     CreateRemoteDirectory createRemDir = new CreateRemoteDirectory(tmpConnectionC4 );
@@ -300,17 +290,17 @@ namespace ftpClientConApp
                     ServerConnectionInformation tmpConnectionC3 = new ServerConnectionInformation();
                     GetConnectionInformationList(ref tmpConnectionC3);
                     ListRemoteDirectory(tmpConnectionC3);
-                    MyAnswer = true; 
+                    MyAnswer = true;
                     break;
                 case "2":
-                    Console.WriteLine(" You choose 2, Put File, We will get right on that! \n");
+                    Console.WriteLine(" You choose 2, Put File! \n");
                     ServerConnectionInformation tmpConnectionC2 = new ServerConnectionInformation();
                     GetConnectionInformation(ref tmpConnectionC2);
-                    //UpLoadRemoteFile(tmpConnectionC2);
+                    UpLoadRemoteFile(tmpConnectionC2);
                     MyAnswer = true;
                     break;
                 case "1":
-                    Console.WriteLine(" You choose 1, Get File, We will get right on that!  \n");
+                    Console.WriteLine(" You choose 1, Get File!  \n");
                     ServerConnectionInformation tmpConnectionC1 = new ServerConnectionInformation();
                     GetConnectionInformationDLF(ref tmpConnectionC1);
                     DownLoadRemoteFile(tmpConnectionC1);
@@ -323,7 +313,7 @@ namespace ftpClientConApp
             return MyAnswer;
         } // end getResponce()
 
-// Down Load Remote File
+        // Down Load Remote File
         public static void GetConnectionInformationDLF(ref ServerConnectionInformation myConnection)
         {
             bool LetsContinueLoop = true;
@@ -338,18 +328,13 @@ namespace ftpClientConApp
                 Console.WriteLine("\nPlease provide the following information: ");
                 Console.WriteLine("Server Name: ");
                 Console.WriteLine("Example ftp://speedtest.tele2.net/512KB.zip ");
-                serverName = Console.ReadLine();
-
-                Console.WriteLine("\nUser Name / anonymous : ");
-                userName = Console.ReadLine();
-
-                Console.WriteLine("\nPassword / anonymous : ");
-                passWord = Console.ReadLine();
-                //PassWord = ReadPassword();
+                serverName = getServerName();
 
                 Console.WriteLine("\nLocal Path and FileName : ");
-                Console.WriteLine("Example c:/download/512KB.zip , note directory must already exist");
-                localFilePath = Console.ReadLine();
+                Console.WriteLine("Example c:/download/bambi.txt , note directory must already exist");
+                localFilePath = getLocalFilePath();
+                userName = getUserName();
+                passWord = getPassWord();
 
                 Console.WriteLine($"\nYou Entered Server Name: {serverName}");
                 Console.WriteLine($"\nYou Entered User Name: {userName}");
@@ -410,7 +395,7 @@ namespace ftpClientConApp
 
                     fileStream.Write(buffer, 0, bytesRead);
                 }
-                fileStream.Close();       
+                fileStream.Close();
             }
             catch (UriFormatException e)
             {
@@ -424,7 +409,7 @@ namespace ftpClientConApp
             }
         } // end DownLoadRemoteFile()
 
-// List Remote Directory
+        // List Remote Directory
         public static void GetConnectionInformationList(ref ServerConnectionInformation myConnection)
         {
             bool LetsContinueLoop = true;
@@ -436,18 +421,12 @@ namespace ftpClientConApp
             do
             {
                 Console.WriteLine("\nPlease provide the following information: ");
-
                 Console.WriteLine("Server Name: ");
                 Console.WriteLine("Example ftp://speedtest.tele2.net ");
-                serverName = Console.ReadLine();
-
-                Console.WriteLine("\nUser Name / anonymous : ");
-                userName = Console.ReadLine();
-
-                Console.WriteLine("\nPassword / anonymous : ");
-                passWord = Console.ReadLine();
-                //PassWord = ReadPassword();
-
+                serverName = getServerName();              
+                userName = getUserName();
+                passWord = getPassWord();
+                
                 Console.WriteLine($"\nYou Entered Server Name: {serverName}");
                 Console.WriteLine($"\nYou Entered User Name: {userName}");
                 Console.WriteLine($"\nYou Entered Password: {passWord}");
@@ -462,7 +441,95 @@ namespace ftpClientConApp
             myConnection.PassWord = passWord;
 
         } // end getConnectionInformationList
+        public static string getPassWord()
+        {
+            bool LetsContinueLoop = true;
+            string myAnswer = "";
+            string passWord = "";
+            do
+            {
+                Console.WriteLine("\nPassword / anonymous : ");
+                passWord = Console.ReadLine();
+                while (passWord == "")
+                {
+                    Console.WriteLine("\nPassWord Entered is blank, Please try again ");
+                    Console.WriteLine("\nPassWord / anonymous : ");
+                    passWord = Console.ReadLine();
+                }
+                Console.WriteLine($"\nYou Entered Password: {passWord}");
+                Console.WriteLine($"\n Y or y to accept and continue. ");
+                myAnswer = Console.ReadLine();
+                if (myAnswer == "Y" || myAnswer == "y") { LetsContinueLoop = false; }
+            } while (LetsContinueLoop);
 
+            return passWord;
+        } // end getPassWord()
+
+        public static string getUserName()
+        {
+            bool LetsContinueLoop = true;
+            string myAnswer = "";
+            string userName = "";
+            do
+            {
+                Console.WriteLine("\nUser Name / anonymous : ");
+                userName = Console.ReadLine();
+                while (userName == "")
+                {
+                    Console.WriteLine("\nUserName Entered is blank, Please try again ");
+                    Console.WriteLine("\nUser Name / anonymous : ");
+                    userName = Console.ReadLine();
+                }
+                Console.WriteLine($"\nYou Entered User Name: {userName}");
+                Console.WriteLine($"\n Y or y to accept and continue. ");
+                myAnswer = Console.ReadLine();
+                if (myAnswer == "Y" || myAnswer == "y") { LetsContinueLoop = false; }
+            } while (LetsContinueLoop);
+
+            return userName;
+        } // end getUserName()
+        public static string getServerName()
+        {
+            bool LetsContinueLoop = true;
+            string myAnswer = "";
+            string serverName = "";
+            do { 
+                serverName = Console.ReadLine();
+                while (serverName == "")
+                {
+                    Console.WriteLine("\nServerName Entered is blank, Please try again ");
+                    serverName = Console.ReadLine();
+                }
+                Console.WriteLine($"\nYou Entered Server Name: {serverName}");
+                Console.WriteLine($"\n Y or y to accept and continue. ");
+                myAnswer = Console.ReadLine();
+                if (myAnswer == "Y" || myAnswer == "y") { LetsContinueLoop = false; }
+           } while (LetsContinueLoop);
+
+            return serverName;
+        } // end getServerName()
+
+        public static string getLocalFilePath()
+        {
+            bool LetsContinueLoop = true;
+            string myAnswer = "";
+            string localFilePath = "";
+            do
+            {
+                localFilePath = Console.ReadLine();
+                while (localFilePath == "")
+                {
+                    Console.WriteLine("\nLocal File Path Entered is blank, Please try again ");
+                    localFilePath = Console.ReadLine();
+                }
+                Console.WriteLine($"\nYou Entered Local Path: {localFilePath}");
+                Console.WriteLine($"\n Y or y to accept and continue. ");
+                myAnswer = Console.ReadLine();
+                if (myAnswer == "Y" || myAnswer == "y") { LetsContinueLoop = false; }
+            } while (LetsContinueLoop);
+
+            return localFilePath;
+        } // end getLocalFilePath()
         public static void ListRemoteDirectory(ServerConnectionInformation myConnection)
         {
             //credit
@@ -470,7 +537,7 @@ namespace ftpClientConApp
             try
             {
                 //Note from Bryan: I am concerned about this code. It looks copied from an example. What about other code?
-
+		        // Note from Marcella code verified ok With Professor
                 // Get the object used to communicate with the server.
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(myConnection.ServerName);
                 request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
