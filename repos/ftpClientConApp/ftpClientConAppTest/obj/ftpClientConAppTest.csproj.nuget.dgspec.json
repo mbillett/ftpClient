@@ -1,0 +1,86 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\marcella\\source\\repos\\ftpClientConApp\\ftpClientConAppTest\\ftpClientConAppTest.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\marcella\\source\\repos\\ftpClientConApp\\ftpClientConAppTest\\ftpClientConAppTest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\marcella\\source\\repos\\ftpClientConApp\\ftpClientConAppTest\\ftpClientConAppTest.csproj",
+        "projectName": "ftpClientConAppTest",
+        "projectPath": "C:\\Users\\marcella\\source\\repos\\ftpClientConApp\\ftpClientConAppTest\\ftpClientConAppTest.csproj",
+        "packagesPath": "C:\\Users\\marcella\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\marcella\\source\\repos\\ftpClientConApp\\ftpClientConAppTest\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\marcella\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.1": {
+            "projectReferences": {
+              "C:\\Users\\marcella\\source\\repos\\ftpClientConApp\\ftpClientConApp\\ftpClientConApp.csproj": {
+                "projectPath": "C:\\Users\\marcella\\source\\repos\\ftpClientConApp\\ftpClientConApp\\ftpClientConApp.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.1": {
+          "dependencies": {
+            "MSTest.TestAdapter": {
+              "target": "Package",
+              "version": "[1.3.2, )"
+            },
+            "MSTest.TestFramework": {
+              "target": "Package",
+              "version": "[1.3.2, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[15.9.0, )"
+            },
+            "Microsoft.NETCore.App": {
+              "target": "Package",
+              "version": "[2.1.0, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
+    "C:\\Users\\marcella\\source\\repos\\ftpClientConApp\\ftpClientConApp\\ftpClientConApp.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\marcella\\source\\repos\\ftpClientConApp\\ftpClientConApp\\ftpClientConApp.csproj",
+        "projectName": "ftpClientConApp",
+        "projectPath": "C:\\Users\\marcella\\source\\repos\\ftpClientConApp\\ftpClientConApp\\ftpClientConApp.csproj"
+      },
+      "frameworks": {
+        "net461": {}
+      }
+    }
+  }
+}
