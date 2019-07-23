@@ -10,7 +10,7 @@ namespace ftpClientConApp
 {
     class FileUpload
     {
-        public void UpLoadRemoteFile(ServerConnectionInformation myConnection)
+        public void UpLoadRemoteFile(MainMenu myConnection)
         {
             try
             {

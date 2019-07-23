@@ -23,7 +23,7 @@ using System.Threading;  // password
 
 namespace ftpClientConApp
 {
-    public class ServerConnectionInformation
+    public class MainMenu
     {
         #region Private Member Variables
         private string userName;
@@ -83,30 +83,8 @@ namespace ftpClientConApp
             get { return runOption; }
             set => runOption = value;
         }
-        // #endregion
-
-        // #region Public Methods  
-        /// Constructor
-        public ServerConnectionInformation()
-        {
-            ServerName = "";
-            UserName = "anonymous";
-            PassWord = "nobody@nowhere.com";
-            FileName = "";
-            LocalFilePath = "";
-        }
-        ///Constructor
-        public ServerConnectionInformation(string serverName, string userName, string passWord, string fileName, string localFilePath)
-        {
-            ServerName = serverName;
-            UserName = userName;
-            PassWord = PassWord;
-            FileName = fileName;
-            LocalFilePath = localFilePath;
-        }
-
-        // general 
-        public static void GetConnectionInformation(ref ServerConnectionInformation myConnection )
+     
+        public static void GetConnectionInformation(ref MainMenu myConnection )
         {
             bool LetsContinueLoop = true;
             string myAnswer = "";
@@ -160,6 +138,8 @@ namespace ftpClientConApp
             Console.WriteLine("  Welcome to FTPClient \n");
 
             bool LetsContinueLoop=true;
+
+            ServerConnectionInformation 
 
             do
             {
@@ -216,7 +196,7 @@ namespace ftpClientConApp
                     break;
                 case "4":
                     Console.WriteLine(" You choose 4, Create Directory:  \n");
-                    ServerConnectionInformation tmpConnectionC4 = new ServerConnectionInformation();
+                    MainMenu tmpConnectionC4 = new MainMenu();
                     GetConnectionInformationList(ref tmpConnectionC4);
                     CreateRemoteDirectory createRemDir = new CreateRemoteDirectory(tmpConnectionC4 );
                     String directory = createRemDir.getDirectoryName();
@@ -248,8 +228,7 @@ namespace ftpClientConApp
             return MyAnswer;
         } // end getResponce()
 
-// Down Load Remote File
-        public static void GetConnectionInformationDLF(ref ServerConnectionInformation myConnection)
+        public static void GetConnectionInformationDLF(ref MainMenu myConnection)
         {
             bool LetsContinueLoop = true;
             string myAnswer = "";
@@ -271,7 +250,7 @@ namespace ftpClientConApp
 
         } // end getConnectionInformationDLF
 
-        public static void GetConnectionInformationList(ref ServerConnectionInformation myConnection)
+        public static void GetConnectionInformationList(ref MainMenu myConnection)
         {
             bool LetsContinueLoop = true;
             string myAnswer = "";
@@ -310,5 +289,5 @@ namespace ftpClientConApp
         } // end getConnectionInformationList
        
 
-    } // end class ServerConnectionInformation
+    } // end class MainMenu
 } // end namespace ftpClientConApp

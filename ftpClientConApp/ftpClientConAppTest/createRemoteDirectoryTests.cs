@@ -20,7 +20,7 @@ namespace ftpClientConAppTest
         [TestMethod]
         public void canCreateDirectoryIfValid()
         {
-            ServerConnectionInformation info = new ServerConnectionInformation();
+            MainMenu info = new MainMenu();
             info.UserName = USERNAME;
             info.PassWord = PASSWORD;
             info.ServerName = SERVERNAME;
@@ -34,7 +34,7 @@ namespace ftpClientConAppTest
         [TestMethod]
         public void ifValidUserButInvalidCharacterDirectoryIsNotCreated()
         {
-            ServerConnectionInformation info = new ServerConnectionInformation();
+            MainMenu info = new MainMenu();
             info.UserName = USERNAME;
             info.PassWord = PASSWORD;
             info.ServerName = SERVERNAME;
@@ -46,7 +46,7 @@ namespace ftpClientConAppTest
         //Same set up as first, but "CRDTest2" as the directory name
         public void ifAlreadyExistsDirectoryIsNotCreated()
         {
-            ServerConnectionInformation info = new ServerConnectionInformation();
+            MainMenu info = new MainMenu();
             info.UserName = USERNAME;
             info.PassWord = PASSWORD;
             info.ServerName = SERVERNAME;
@@ -62,7 +62,7 @@ namespace ftpClientConAppTest
         [TestMethod]
         public void ifNoServerConnectionDirectoryNotCreated()
         {
-            ServerConnectionInformation info = new ServerConnectionInformation();
+            MainMenu info = new MainMenu();
             info.UserName = USERNAME;
             info.PassWord = PASSWORD;
             info.ServerName = "ftp://notARealServerThisIsFakeForATest12398724324";
@@ -77,7 +77,7 @@ namespace ftpClientConAppTest
         [TestMethod]
         public void ifUserDoesNotExistDirectoryIsNotCreated()
         {
-            ServerConnectionInformation info = new ServerConnectionInformation();
+            MainMenu info = new MainMenu();
             info.UserName = "thisusershouldnotexist";
             info.PassWord = "thisshouldnotbeapassword";
             info.ServerName = SERVERNAME;
@@ -94,7 +94,7 @@ namespace ftpClientConAppTest
         [TestMethod]
         public void ifInvalidUserDirectoryIsNotCreated()
         {
-            ServerConnectionInformation info = new ServerConnectionInformation();
+            MainMenu info = new MainMenu();
             info.UserName = "permdenied";
             info.PassWord = "permdenied";
             info.ServerName = SERVERNAME;

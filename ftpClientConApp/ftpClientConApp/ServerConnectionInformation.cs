@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ftpClientConApp
 {
-    class ServerConnectionInformation
+    class MainMenu
     {
 
     }
