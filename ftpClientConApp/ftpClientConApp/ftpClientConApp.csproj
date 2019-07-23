@@ -43,8 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateRemoteDirectory.cs" />
+    <Compile Include="DeleteFromRemote.cs" />
+    <Compile Include="FileDownload.cs" />
+    <Compile Include="FileUpload.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerConnectionInformation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
