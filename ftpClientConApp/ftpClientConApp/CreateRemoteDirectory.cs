@@ -8,16 +8,14 @@ namespace ftpClientConApp
     //Works off of the functions provided in Program.cs
     public class CreateRemoteDirectory
     {
-        //A ServerConnectionInformation variable to keep track of the user and server for the use of an instance of this class.
+        //A MainMenu variable to keep track of the user and server for the use of an instance of this class.
         private ServerConnectionInformation connection;
 
         //A constructor for the class which takes in a ServerconnectionInformation to set up for its use.
         public CreateRemoteDirectory(ServerConnectionInformation toUse)
         {
-            this.connection = new ServerConnectionInformation();
-            this.connection.UserName = toUse.UserName;
-            this.connection.PassWord = toUse.PassWord;
-            this.connection.ServerName = toUse.ServerName;
+            this.connection = toUse;
+         
         }
 
         //A function to get a name of a directory to create from the user. Returns the string that the user enters as the name.
