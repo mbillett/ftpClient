@@ -23,148 +23,66 @@ using System.Threading;  // password
 
 namespace ftpClientConApp
 {
-    public class MainMenu
+    public class FtpClientMain
     {
-        #region Private Member Variables
-        private string userName;
-        private string passWord;
-        private string serverName;
-        private string emailAddress;
-        private string fileName;
-        private string localFilePath;
-        private string myAnswer;
-        private string runOption;
-        #endregion
-
-        #region Public Declarations
-        //public static string MyDateTime = DateTime.Now.ToString("yyyMMddHHmm");
-        //public static string LogName = "SFTPLog_" + MyDateTime + ".log";
-        //public static StreamWriter PrepLog = File.AppendText(LogName);
-        #endregion
-
-        #region Public Properties
-        public string UserName
-        {
-            get { return userName; }
-            set { userName = value; }
-        }
-        public string PassWord
-        {
-            get { return passWord; }
-            set => passWord = value;
-        }
-        public string ServerName
-        {
-            get { return serverName; }
-            set => serverName = value;
-        }
-        public string EmailAddress
-        {
-            get { return emailAddress; }
-            set => emailAddress = value;
-        }
-        public string FileName
-        {
-            get { return fileName; }
-            set => fileName = value;
-        }
-        public string LocalFilePath
-        {
-            get { return localFilePath; }
-            set => localFilePath = value;
-        }
-        public string MyAnswer
-        {
-            get { return myAnswer; }
-            set => myAnswer = value;
-        }
-        public string RunOption
-        {
-            get { return runOption; }
-            set => runOption = value;
-        }
-     
-        public static void GetConnectionInformation(ref MainMenu myConnection )
-        {
-            bool LetsContinueLoop = true;
-            string myAnswer = "";
-            string userName = "anonymous";
-            string passWord = "anonymous";
-            string fileName = "";
-            string serverName = "";
-
-            do
-            {
-                Console.WriteLine("\nPlease provide the following information: ");
-                Console.WriteLine("Server Name: ");
-                Console.WriteLine("Example localhost ");
-                string serverResponse = Console.ReadLine();
-                serverName = "ftp://" + serverResponse;
-
-                Console.WriteLine("\nUser Name / anonymous : ");
-                userName = Console.ReadLine();
-
-                Console.WriteLine("\nPassword / anonymous : ");
-                passWord = Console.ReadLine();
-                //PassWord = ReadPassword(); // not included yet
-
-                Console.WriteLine("\nFileName : ");
-                fileName = Console.ReadLine();
-
-                Console.WriteLine($"\nYou Entered Server Name: {serverName}");
-                Console.WriteLine($"\nYou Entered User Name: {userName}");
-                Console.WriteLine($"\nYou Entered Password: {passWord}");
-                Console.WriteLine($"\nYou Entered FileName: {fileName}");
-                Console.WriteLine($"\n Y or y to accept and continue. ");
-                myAnswer = Console.ReadLine();
-                if (myAnswer == "Y" || myAnswer == "y") { LetsContinueLoop = false; }
-
-            } while (LetsContinueLoop);
-
-            myConnection.ServerName = serverName;
-            myConnection.UserName = userName;
-            myConnection.PassWord = passWord;
-            myConnection.FileName = fileName;
-
-        } // end getConnectionInformation
-
-        
-
-        public static bool DeleteRemoteFile(Uri serverUri){
-            //Source: https://docs.microsoft.com/en-us/dotnet/api/system.net.ftpwebrequest?view=netframework-4.8
-
-            if(serverUri.Scheme == Uri.UriSchemeFtp){
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(serverUri);
-                request.Method = WebRequestMethods.Ftp.DeleteFile;
- 
-                FtpWebResponse response = (FtpWebResponse) request.GetResponse();
-                Console.WriteLine("Delete status: {0}",response.StatusDescription);  
-                response.Close();
-                
-                return true;
-            }
-
-            else{
-                return false;
-            }
-        }
-
-        #endregion
-
         static void Main(string[] args)
         {
             // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
             Console.WriteLine("  Welcome to FTPClient \n");
 
             bool LetsContinueLoop=true;
+            int running = 1;
+            String username = "";
+            String password = "";
+            String server = "";
 
-        
-            do
+            while(running == 1)
             {
-                DisplayMenu();
-                LetsContinueLoop = GetResponce();
+                Console.WriteLine("Press 1 to log in, Press 2 to exit");
+                String response = Console.ReadLine();
+                if (response == "1")
+                {
+                    //get credentials for user
+                    Console.WriteLine("Enter your FTP server (localhost, an IP address, etc.\n");
+                    server = Console.ReadLine();
+                    Console.WriteLine("Enter your FTP server username\n");
+                    username = Console.ReadLine();
+                    Console.WriteLine("Enter your FTP server password\n");
+                    password = Console.ReadLine();
 
-            } while (LetsContinueLoop);
+                    bool timeout = false;
+                    /**
+                     * TO IMPLEMENT: LOG - IN
+                     * Use the above info to try making a request to the server
+                     * The request should be something like dirsize where only read permissions are necessary
+                     * Only matters if the response code indicates success, if so proceed.
+                     * 
+                     * 
+                     * TO IMPLEMENT: Time out
+                     * Repeat similar to the above with the request to the server. If the response code
+                     * doesn't indicate success, set timeout to true.
+                     * 
+                     * 
+                     * TO IMPLEMENT: Log out
+                     * if the input option is set to the log out option, set timeout to false
+                     */
+
+                    while(timeout == false)
+                    {
+                        DisplayMenu();
+                        timeout = GetResponce(username, password, server);
+
+                        //TIMEOUT -- probably want to do timeout check here
+                    }
+                }
+                else if(response == "2")
+                {
+                    running = 0;
+                } else
+                {
+                    continue;
+                }
+            }
 
         } // end Main()
 
@@ -184,129 +102,81 @@ namespace ftpClientConApp
 
         } // end DisplayMenu()
 
-        public static bool GetResponce()
+        public static bool GetResponce(String username, String password, String server)
         {
             string getAnswer = "";
             bool MyAnswer = true;
             getAnswer = Console.ReadLine();
- 
+            ServerConnectionInformation conn = new ServerConnectionInformation(username, password, server);
             switch (getAnswer)
             {
                 case "9":
                     Console.WriteLine(" Not Implemented Yet \n");
+                    //Log out -> set to true
                     MyAnswer = false;
                     break;
                 case "8":
                     Console.WriteLine(" Not Implemented Yet  \n");
-                    MyAnswer = true;
+                    MyAnswer = false;
                     break;
                 case "7":
                     Console.WriteLine(" Not Implemented Yet  \n");
-                    MyAnswer = true;
+                    //Rename remote file
+                    MyAnswer = false;
                     break;
                 case "6":
                     Console.WriteLine(" Not Implemented Yet  \n");
-                    MyAnswer = true;
+                    //Change file permissions
+                    MyAnswer = false;
                     break;
                 case "5":
                     Console.WriteLine(" Not Implemented Yet  \n");
-
-                    MyAnswer = true;
+                    //Delete file on remote server
+                    MyAnswer = false;
                     break;
                 case "4":
                     Console.WriteLine(" You choose 4, Create Directory:  \n");
-                    MainMenu tmpConnectionC4 = new MainMenu();
-                    GetConnectionInformationList(ref tmpConnectionC4);
-                    CreateRemoteDirectory createRemDir = new CreateRemoteDirectory(tmpConnectionC4 );
+                    //create remote directory
+                    
+            
+                    CreateRemoteDirectory createRemDir = new CreateRemoteDirectory(conn);
                     String directory = createRemDir.getDirectoryName();
                     String response = createRemDir.create(directory);
-                    if(response == "success")
+                    if (response == "success")
                     {
                         Console.Write("Directory Created\n");
-                    } else
+                    }
+                    else if (response == "disconnect")
+                    {
+                        //If lost connection to server, log out
+                        MyAnswer = true;
+                        break;
+                    }
+                    else
                     {
                         Console.Write("Could not create directory due to an error.\n" + response + "\n");
                     }
-                    MyAnswer = true;
+                    MyAnswer = false;
                     break;
                 case "3":
                     Console.WriteLine(" Not Implemented Yet \n");
-                    MyAnswer = true; 
+                    //list remote directory
+                    MyAnswer = false; 
                     break;
                 case "2":
                     Console.WriteLine(" Not Implemented Yet \n");
-                    MyAnswer = true;
+                    MyAnswer = false;
                     break;
                 case "1":
                     Console.WriteLine(" Not Implemented Yet  \n");
+                    //File upload
                     break;
                 default:
                     Console.WriteLine("\n That was not a valid input, Please try again \n");
+                    //File download
                     break;
             }
             return MyAnswer;
         } // end getResponce()
-
-        public static void GetConnectionInformationDLF(ref MainMenu myConnection)
-        {
-            bool LetsContinueLoop = true;
-            string myAnswer = "";
-            string localFilePath = "";
-            do
-            {
-                Console.WriteLine("\nLocal Path and FileName : ");
-                Console.WriteLine("Example c:/download/512KB.zip , note directory must already exist");
-                localFilePath = Console.ReadLine();
-
-                Console.WriteLine($"\nYou Entered Local Path and File Name: {localFilePath}");
-                Console.WriteLine($"\n Y or y to accept and continue. ");
-                myAnswer = Console.ReadLine();
-                if (myAnswer == "Y" || myAnswer == "y") { LetsContinueLoop = false; }
-
-            } while (LetsContinueLoop);
-
-            myConnection.localFilePath = localFilePath;
-
-        } // end getConnectionInformationDLF
-
-        public static void GetConnectionInformationList(ref MainMenu myConnection)
-        {
-            bool LetsContinueLoop = true;
-            string myAnswer = "";
-            string serverName = "ftp://speedtest.tele2.net";
-            string userName = "anonymous";
-            string passWord = "anonymous";
-
-            do
-            {
-                Console.WriteLine("\nPlease provide the following information: ");
-
-                Console.WriteLine("Server Name: ");
-                Console.WriteLine("Example ftp://speedtest.tele2.net ");
-                serverName = Console.ReadLine();
-
-                Console.WriteLine("\nUser Name / anonymous : ");
-                userName = Console.ReadLine();
-
-                Console.WriteLine("\nPassword / anonymous : ");
-                passWord = Console.ReadLine();
-                //PassWord = ReadPassword();
-
-                Console.WriteLine($"\nYou Entered Server Name: {serverName}");
-                Console.WriteLine($"\nYou Entered User Name: {userName}");
-                Console.WriteLine($"\nYou Entered Password: {passWord}");
-                Console.WriteLine($"\n Y or y to accept and continue. ");
-                myAnswer = Console.ReadLine();
-                if (myAnswer == "Y" || myAnswer == "y") { LetsContinueLoop = false; }
-
-            } while (LetsContinueLoop);
-
-            myConnection.ServerName = serverName;
-            myConnection.UserName = userName;
-            myConnection.PassWord = passWord;
-
-        } // end getConnectionInformationList
-       
-
     } // end class MainMenu
 } // end namespace ftpClientConApp
