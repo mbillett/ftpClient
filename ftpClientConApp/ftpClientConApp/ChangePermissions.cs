@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,14 +17,23 @@ namespace ftpClientConApp
             this.connection = toUse;
 
         }
-
-     
-
        
-        public String change(String dir, String perms)
+        public String change(String dir, int perms)
         {
-            return "";
+            try
+            {
+                FluentFTP.FtpClient client = new FluentFTP.FtpClient(this.connection.ServerName);
+               
+                client.Credentials = new NetworkCredential(this.connection.UserName, this.connection.PassWord);
+                client.Chmod(dir, perms);
+            } catch(FluentFTP.FtpAuthenticationException)
+            {
 
+            } catch(FluentFTP.Ftp)
+
+            
+            return "";
         }
+
     }
 }
