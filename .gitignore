@@ -3,3 +3,9 @@
 ################################################################################
 
 /.vs
+/ftpClientConApp/.vs/ftpClientConApp/v16/Server/sqlite3
+/ftpClientConApp/.vs/ftpClientConApp/v16
+/ftpClientConApp/ftpClientConApp/obj/Release
+/ftpClientConApp/ftpClientConAppTest/obj/Release/netcoreapp2.1
+/ftpClientConApp/packages/FluentFTP.26.0.2
+/ftpClientConApp/ftpClientConAppTest/obj/ftpClientConAppTest.csproj.nuget.dgspec.json
