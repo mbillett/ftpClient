@@ -6,10 +6,10 @@ CS 410/510 Agile FTP Client
 Git clone the project into Visual Studio IDE and <br>
 run the code from there. <br><br>
 
-Or from the command line, compile the program.cs file:
+Or from the command line, compile the following files:
 
 ```
-$ csc Program.cs
+$ csc Program.cs CreateRemoteDirectory.cs ServerConnectionInformation.cs 
 ```
 
 and then run it:
