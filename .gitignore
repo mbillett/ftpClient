@@ -3,3 +3,15 @@
 ################################################################################
 
 /.vs/ftpClient/v16
+/.vs
+/ftpClientConApp/.vs/ftpClientConApp/DesignTimeBuild
+/ftpClientConApp/.vs/ftpClientConApp/v16/Server/sqlite3
+/ftpClientConApp/.vs/ftpClientConApp/v16/.suo
+/ftpClientConApp/ftpClientConApp/obj/Release
+/ftpClientConApp/ftpClientConApp/ftpClientConApp.csproj.user
+/ftpClientConApp/ftpClientConAppTest/obj/Release/netcoreapp2.1
+/ftpClientConApp/ftpClientConAppTest/obj/ftpClientConAppTest.csproj.nuget.dgspec.json
+/ftpClientConApp/Tests/obj/Release/netcoreapp2.1/ftpClientConAppTests.Program.cs
+/ftpClientConApp/Tests/obj/Release/netcoreapp2.1/ftpClientConAppTests.csproj.CoreCompileInputs.cache
+/ftpClientConApp/Tests/obj/Release/netcoreapp2.1/ftpClientConAppTests.AssemblyInfoInputs.cache
+/ftpClientConApp/Tests/obj/Release/netcoreapp2.1/ftpClientConAppTests.AssemblyInfo.cs
